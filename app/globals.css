@@ -1,0 +1,397 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   OBSIDIAN 3D — DESIGN SYSTEM
+   Deep obsidian black · electric-lime "volt" accent · chrome metal
+   ========================================================================== */
+
+@theme {
+  /* --- palette ---------------------------------------------------------- */
+  --color-obsidian: #04060a;
+  --color-void: #070a10;
+  --color-ink: #0b0f16;
+  --color-carbon: #12161f;
+  --color-steel: #1b212c;
+  --color-chrome: #e7ecf3;
+  --color-ash: #99a2b0;
+  --color-ash-dim: #5f6875;
+  --color-volt: #ccff00;
+  --color-volt-soft: #e3ff85;
+  --color-volt-deep: #8fbb0b;
+  --color-line: rgba(231, 236, 243, 0.09);
+  --color-line-strong: rgba(231, 236, 243, 0.18);
+
+  /* --- typography ------------------------------------------------------- */
+  --font-display: "Space Grotesk Variable", "Space Grotesk", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* --- motion ----------------------------------------------------------- */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --animate-marquee: marquee 46s linear infinite;
+  --animate-marquee-rev: marquee-rev 58s linear infinite;
+  --animate-spin-slow: spin-slow 34s linear infinite;
+  --animate-orbit: orbit 16s linear infinite;
+  --animate-pulse-soft: pulse-soft 4.5s ease-in-out infinite;
+  --animate-scanline: scanline 7s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  --animate-bob: bob 7.5s ease-in-out infinite;
+  --animate-dash: dash 12s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-rev {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    background-color: var(--color-obsidian);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-obsidian);
+    color: var(--color-chrome);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-volt);
+    color: #04060a;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-volt);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /*
+   * The custom cursor is mounted only on precise pointers without a
+   * reduced-motion preference, and it flags the body while live. Text fields
+   * keep their native caret affordance so typing never loses its cursor.
+   */
+  @media (hover: hover) and (pointer: fine) {
+    body[data-custom-cursor="true"],
+    body[data-custom-cursor="true"] a,
+    body[data-custom-cursor="true"] button,
+    body[data-custom-cursor="true"] [role="button"] {
+      cursor: none;
+    }
+
+    body[data-custom-cursor="true"] input,
+    body[data-custom-cursor="true"] textarea,
+    body[data-custom-cursor="true"] select {
+      cursor: text;
+    }
+  }
+
+  /*
+   * Locomotive Scroll v4 renders its own scrollbar inside the smooth
+   * container. Recolour it to match the theme instead of its default black.
+   */
+  .c-scrollbar {
+    background: transparent;
+    /* Keep Locomotive's generated scrollbar above the content it scrolls. */
+    z-index: 80;
+  }
+  .c-scrollbar_thumb {
+    background-color: var(--color-steel);
+    opacity: 1;
+    width: 6px;
+    margin: 3px;
+  }
+  .c-scrollbar_thumb:hover,
+  .has-scroll-dragging .c-scrollbar_thumb {
+    background-color: var(--color-volt);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #04060a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1b212c;
+    border-radius: 9999px;
+    border: 3px solid #04060a;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2a3240;
+  }
+}
+
+/* ==========================================================================
+   COMPONENTS
+   ========================================================================== */
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 108rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4.5vw, 5rem);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ash-dim);
+  }
+
+  .rule {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-line-strong) 12%,
+      var(--color-line-strong) 88%,
+      transparent
+    );
+  }
+
+  .text-chrome {
+    background-image: linear-gradient(
+      178deg,
+      #ffffff 0%,
+      #e7ecf3 34%,
+      #a8b3c2 58%,
+      #f2f6fb 78%,
+      #9aa5b4 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-line-strong);
+  }
+
+  .glass {
+    background: color-mix(in oklab, var(--color-ink) 72%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  .panel {
+    position: relative;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0) 42%),
+      var(--color-ink);
+    border: 1px solid var(--color-line);
+  }
+
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+  }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+    background-size: 96px 96px;
+  }
+
+  .volt-glow {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-volt) 45%, transparent),
+      0 0 34px -6px color-mix(in oklab, var(--color-volt) 45%, transparent),
+      inset 0 0 24px -14px color-mix(in oklab, var(--color-volt) 70%, transparent);
+  }
+}
+
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility mask-fade-b {
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+@utility mask-fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+@utility text-display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 9.2vw, 9.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  font-weight: 500;
+}
+
+@utility text-display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 6.2vw, 5.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+}
+
+@utility text-display-md {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.4vw, 3rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+}
+
+@utility text-body-lg {
+  font-size: clamp(1rem, 1.15vw, 1.1875rem);
+  line-height: 1.65;
+  color: var(--color-ash);
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
